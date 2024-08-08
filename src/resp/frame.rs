@@ -7,4 +7,5 @@ use super::simple::{SimpleError, SimpleString};
 pub enum RespFrame {
     SimpleStrings(SimpleString),
     SimpleErrors(SimpleError),
+    SimpleIntegers(i64),
 }

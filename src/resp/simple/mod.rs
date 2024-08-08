@@ -1,4 +1,5 @@
 mod errors;
+mod integer;
 mod strings;
 
 pub use errors::SimpleError;
