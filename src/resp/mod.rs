@@ -1,7 +1,7 @@
-use bytes::BytesMut;
+use bytes::{Buf, BytesMut};
 use enum_dispatch::enum_dispatch;
 use frame::RespFrame;
-use simple::{SimpleError, SimpleString};
+use simple::{SimpleError, SimpleNull, SimpleString};
 use thiserror::Error;
 
 mod aggregate;
@@ -41,4 +41,25 @@ pub enum RespError {
     Utf8Error(#[from] std::string::FromUtf8Error),
     #[error("Parse float error: {0}")]
     ParseFloatError(#[from] std::num::ParseFloatError),
+}
+
+// utility functions
+fn extract_fixed_data(
+    buf: &mut BytesMut,
+    expect: &str,
+    expect_type: &str,
+) -> Result<(), RespError> {
+    if buf.len() < expect.len() {
+        return Err(RespError::NotComplete);
+    }
+    if !buf.starts_with(expect.as_bytes()) {
+        return Err(RespError::InvalidFrame(format!(
+            "Expect {} but got {:?}",
+            expect_type, buf
+        )));
+    }
+
+    // skip the prefix
+    buf.advance(expect.len());
+    Ok(())
 }

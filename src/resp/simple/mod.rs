@@ -1,8 +1,10 @@
 mod errors;
 mod integer;
+mod nulls;
 mod strings;
 
 pub use errors::SimpleError;
+pub use nulls::SimpleNull;
 pub use strings::SimpleString;
 
 use super::RespError;
