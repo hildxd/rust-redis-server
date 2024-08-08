@@ -1,5 +1,7 @@
+mod errors;
 mod strings;
 
+pub use errors::SimpleError;
 pub use strings::SimpleString;
 
 use super::RespError;

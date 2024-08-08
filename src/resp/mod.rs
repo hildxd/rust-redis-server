@@ -1,7 +1,7 @@
 use bytes::BytesMut;
 use enum_dispatch::enum_dispatch;
 use frame::RespFrame;
-use simple::SimpleString;
+use simple::{SimpleError, SimpleString};
 use thiserror::Error;
 
 mod aggregate;
