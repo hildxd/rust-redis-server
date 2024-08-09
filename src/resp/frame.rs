@@ -9,4 +9,5 @@ pub enum RespFrame {
     SimpleErrors(SimpleError),
     SimpleIntegers(i64),
     SimpleNulls(SimpleNull),
+    SimpleBooleans(bool),
 }
