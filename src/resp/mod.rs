@@ -1,6 +1,7 @@
+use aggregate::{BulkNullString, BulkString};
 use bytes::{Buf, BytesMut};
 use enum_dispatch::enum_dispatch;
-use frame::RespFrame;
+pub use frame::RespFrame;
 use simple::{BigNumber, SimpleError, SimpleNull, SimpleString};
 use thiserror::Error;
 
@@ -64,4 +65,25 @@ fn extract_fixed_data(
     // skip the prefix
     buf.advance(expect.len());
     Ok(())
+}
+
+pub fn extract_simple_data_end_index(buf: &[u8], prefix: &str) -> Result<usize, RespError> {
+    if buf.len() < 3 {
+        return Err(RespError::NotComplete);
+    }
+    if !buf.starts_with(prefix.as_bytes()) {
+        return Err(RespError::InvalidFrame(format!("Invalid frame: {:?}", buf)));
+    }
+    let end_index = find_ctrl_index(buf, 1).ok_or(RespError::NotComplete)?;
+    Ok(end_index)
+}
+
+fn find_ctrl_index(buf: &[u8], start: usize) -> Option<usize> {
+    (start..buf.len()).find(|&i| buf[i] == b'\r' && buf.get(i + 1) == Some(&b'\n'))
+}
+
+pub fn parse_length(buf: &[u8], prefix: &str) -> Result<(usize, usize), RespError> {
+    let end = extract_simple_data_end_index(buf, prefix)?;
+    let s = String::from_utf8_lossy(&buf[prefix.len()..end]);
+    Ok((end, s.parse()?))
 }

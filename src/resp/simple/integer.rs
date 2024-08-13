@@ -1,6 +1,5 @@
-use crate::resp::{RespDecode, RespEncode, RespError, CRLF_LEN};
+use crate::resp::{extract_simple_data_end_index, RespDecode, RespEncode, RespError, CRLF_LEN};
 
-use super::extract_simple_data_end_index;
 impl RespEncode for i64 {
     fn encode(self) -> Vec<u8> {
         let sign = match self.is_negative() {

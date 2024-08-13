@@ -1,6 +1,4 @@
-use crate::resp::{RespDecode, RespEncode};
-
-use super::extract_simple_data_end_index;
+use crate::resp::{extract_simple_data_end_index, RespDecode, RespEncode};
 
 impl RespDecode for f64 {
     const PREFIX: &'static str = ",";

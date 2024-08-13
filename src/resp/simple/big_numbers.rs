@@ -5,7 +5,7 @@ use bigdecimal::BigDecimal;
 
 use crate::resp::{RespDecode, RespEncode, RespError, CRLF_LEN};
 
-use super::extract_simple_data_end_index;
+use crate::resp::extract_simple_data_end_index;
 
 #[derive(Debug)]
 pub struct BigNumber(pub BigDecimal);

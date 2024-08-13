@@ -1,6 +1,9 @@
 use enum_dispatch::enum_dispatch;
 
-use super::simple::{BigNumber, SimpleError, SimpleNull, SimpleString};
+use super::{
+    aggregate::{BulkNullString, BulkString},
+    simple::{BigNumber, SimpleError, SimpleNull, SimpleString},
+};
 
 #[derive(Debug)]
 #[enum_dispatch(RespEncode)]
@@ -12,4 +15,6 @@ pub enum RespFrame {
     Booleans(bool),
     Doubles(f64),
     BigNumbers(BigNumber),
+    BulkStrings(BulkString),
+    BulkNullStrings(BulkNullString),
 }

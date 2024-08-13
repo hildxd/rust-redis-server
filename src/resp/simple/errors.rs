@@ -1,8 +1,6 @@
 use std::ops::Deref;
 
-use crate::resp::{RespDecode, RespEncode, RespError, CRLF_LEN};
-
-use super::extract_simple_data_end_index;
+use crate::resp::{extract_simple_data_end_index, RespDecode, RespEncode, RespError, CRLF_LEN};
 
 #[derive(Debug, PartialEq, PartialOrd)]
 pub struct SimpleError(pub String);
