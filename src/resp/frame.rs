@@ -1,6 +1,6 @@
 use enum_dispatch::enum_dispatch;
 
-use super::simple::{SimpleError, SimpleNull, SimpleString};
+use super::simple::{BigNumber, SimpleError, SimpleNull, SimpleString};
 
 #[derive(Debug)]
 #[enum_dispatch(RespEncode)]
@@ -11,4 +11,5 @@ pub enum RespFrame {
     Nulls(SimpleNull),
     Booleans(bool),
     Doubles(f64),
+    BigNumbers(BigNumber),
 }

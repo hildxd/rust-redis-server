@@ -1,7 +1,7 @@
 use bytes::{Buf, BytesMut};
 use enum_dispatch::enum_dispatch;
 use frame::RespFrame;
-use simple::{SimpleError, SimpleNull, SimpleString};
+use simple::{BigNumber, SimpleError, SimpleNull, SimpleString};
 use thiserror::Error;
 
 mod aggregate;
@@ -24,7 +24,7 @@ pub trait RespEncode {
     fn encode(self) -> Vec<u8>;
 }
 
-#[derive(Error, Debug, PartialEq, Eq)]
+#[derive(Error, Debug, PartialEq)]
 pub enum RespError {
     #[error("Invalid frame: {0}")]
     InvalidFrame(String),
@@ -41,6 +41,8 @@ pub enum RespError {
     Utf8Error(#[from] std::string::FromUtf8Error),
     #[error("Parse float error: {0}")]
     ParseFloatError(#[from] std::num::ParseFloatError),
+    #[error("Parse big number error: {0}")]
+    ParseBigNumberError(#[from] bigdecimal::ParseBigDecimalError),
 }
 
 // utility functions
