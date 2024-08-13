@@ -27,7 +27,7 @@ impl Deref for SimpleString {
 }
 
 impl RespEncode for SimpleString {
-    fn encode(&self) -> Vec<u8> {
+    fn encode(self) -> Vec<u8> {
         format!("+{}\r\n", self.0).into_bytes()
     }
 }

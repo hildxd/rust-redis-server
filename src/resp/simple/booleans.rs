@@ -2,7 +2,7 @@ use crate::resp::{extract_fixed_data, RespDecode, RespEncode, RespError, CRLF_LE
 
 use super::extract_simple_data_end_index;
 impl RespEncode for bool {
-    fn encode(&self) -> Vec<u8> {
+    fn encode(self) -> Vec<u8> {
         let value = match self {
             true => "t",
             false => "f",

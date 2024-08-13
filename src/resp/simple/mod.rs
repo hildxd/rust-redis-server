@@ -1,4 +1,5 @@
 mod booleans;
+mod doubles;
 mod errors;
 mod integer;
 mod nulls;

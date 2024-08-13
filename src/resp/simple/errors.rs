@@ -26,7 +26,7 @@ impl Deref for SimpleError {
 }
 
 impl RespEncode for SimpleError {
-    fn encode(&self) -> Vec<u8> {
+    fn encode(self) -> Vec<u8> {
         format!("-{}\r\n", self.0).into_bytes()
     }
 }

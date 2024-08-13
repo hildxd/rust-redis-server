@@ -4,7 +4,7 @@ use crate::resp::{extract_fixed_data, RespDecode, RespEncode, RespError};
 pub struct SimpleNull;
 
 impl RespEncode for SimpleNull {
-    fn encode(&self) -> Vec<u8> {
+    fn encode(self) -> Vec<u8> {
         b"_\r\n".to_vec()
     }
 }

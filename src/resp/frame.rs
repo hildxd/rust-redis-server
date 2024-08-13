@@ -5,9 +5,10 @@ use super::simple::{SimpleError, SimpleNull, SimpleString};
 #[derive(Debug)]
 #[enum_dispatch(RespEncode)]
 pub enum RespFrame {
-    SimpleStrings(SimpleString),
-    SimpleErrors(SimpleError),
-    SimpleIntegers(i64),
-    SimpleNulls(SimpleNull),
-    SimpleBooleans(bool),
+    Strings(SimpleString),
+    Errors(SimpleError),
+    Integers(i64),
+    Nulls(SimpleNull),
+    Booleans(bool),
+    Doubles(f64),
 }

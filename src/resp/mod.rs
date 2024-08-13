@@ -21,7 +21,7 @@ pub trait RespDecode: Sized {
 
 #[enum_dispatch]
 pub trait RespEncode {
-    fn encode(&self) -> Vec<u8>;
+    fn encode(self) -> Vec<u8>;
 }
 
 #[derive(Error, Debug, PartialEq, Eq)]
