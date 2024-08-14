@@ -7,7 +7,7 @@ use crate::resp::{RespDecode, RespEncode, RespError, CRLF_LEN};
 
 use crate::resp::extract_simple_data_end_index;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, PartialOrd)]
 pub struct BigNumber(pub BigDecimal);
 
 impl BigNumber {

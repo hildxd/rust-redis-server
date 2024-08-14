@@ -1,4 +1,4 @@
-use aggregate::{BulkNullString, BulkString};
+use aggregate::{BulkNullString, BulkString, RespFrameArray, RespNullArray};
 use bytes::{Buf, BytesMut};
 use enum_dispatch::enum_dispatch;
 pub use frame::RespFrame;
@@ -11,6 +11,7 @@ mod simple;
 
 const CRLF: &[u8] = b"\r\n";
 const CRLF_LEN: usize = CRLF.len();
+const BUF_CAP: usize = 4096;
 
 pub trait RespDecode: Sized {
     const PREFIX: &'static str;
@@ -29,10 +30,10 @@ pub trait RespEncode {
 pub enum RespError {
     #[error("Invalid frame: {0}")]
     InvalidFrame(String),
-    // #[error("Invalid frame type: {0}")]
-    // InvalidFrameType(String),
-    // #[error("Invalid frame length： {0}")]
-    // InvalidFrameLength(isize),
+    #[error("Invalid frame type: {0}")]
+    InvalidFrameType(String),
+    #[error("Invalid frame length： {0}")]
+    InvalidFrameLength(isize),
     #[error("Frame is not complete")]
     NotComplete,
 
@@ -86,4 +87,35 @@ pub fn parse_length(buf: &[u8], prefix: &str) -> Result<(usize, usize), RespErro
     let end = extract_simple_data_end_index(buf, prefix)?;
     let s = String::from_utf8_lossy(&buf[prefix.len()..end]);
     Ok((end, s.parse()?))
+}
+
+fn calc_total_length(buf: &[u8], end: usize, len: usize, prefix: &str) -> Result<usize, RespError> {
+    let mut total = end + CRLF_LEN;
+    let mut data = &buf[total..];
+    match prefix {
+        "*" | "~" => {
+            // find nth CRLF in the buffer, for array and set, we need to find 1 CRLF for each element
+            for _ in 0..len {
+                let len = RespFrame::expect_length(data)?;
+                data = &data[len..];
+                total += len;
+            }
+            Ok(total)
+        }
+        "%" => {
+            // find nth CRLF in the buffer. For map, we need to find 2 CRLF for each key-value pair
+            for _ in 0..len {
+                let len = SimpleString::expect_length(data)?;
+
+                data = &data[len..];
+                total += len;
+
+                let len = RespFrame::expect_length(data)?;
+                data = &data[len..];
+                total += len;
+            }
+            Ok(total)
+        }
+        _ => Ok(len + CRLF_LEN),
+    }
 }

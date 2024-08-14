@@ -4,10 +4,10 @@ use bytes::{Buf, BytesMut};
 
 use crate::resp::{extract_fixed_data, parse_length, RespDecode, RespEncode, RespError, CRLF_LEN};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, PartialOrd)]
 pub struct BulkString(pub Vec<u8>);
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, PartialOrd)]
 pub struct BulkNullString;
 
 impl RespDecode for BulkNullString {
